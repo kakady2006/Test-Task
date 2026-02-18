@@ -1,8 +1,15 @@
-*{
-  margin: 0;
-  padding: 0;
-}
-body{
-  background: #f9fafb;
-  color: #111928;
+@import "tailwindcss";
+
+@source "../../../src";
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    color: #111928;
+    background: #F9FAFB;
+  }
 }
