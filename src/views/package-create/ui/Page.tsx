@@ -2,7 +2,7 @@ import PackageCreateForm from "@/widgets/package-create-form/ui/PackageCreateFor
 
 export const PackageCreatePage = () => {
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
+    <main className="flex h-screen w-full flex-col items-center justify-center bg-white sm:bg-gray-100 sm:p-4">
       <PackageCreateForm />
     </main>
   );
