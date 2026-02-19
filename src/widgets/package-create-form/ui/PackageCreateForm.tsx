@@ -34,7 +34,6 @@ const PackageCreateForm = () => {
 
     useEffect(() => {
         if (pickupPoints && pickupPoints.length > 0 && !selectedPickupPointId) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedPickupPointId(pickupPoints[0].id);
         }
     }, [pickupPoints, selectedPickupPointId]);
@@ -42,7 +41,6 @@ const PackageCreateForm = () => {
     useEffect(() => {
         if (availableDates.length > 0) {
             if (!date || !availableDates.includes(date)) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setDate(availableDates[0]);
             }
         }
@@ -67,23 +65,22 @@ const PackageCreateForm = () => {
 
         setIsSubmitting(true);
         try {
-            // Находим объект ПВЗ по ID
             const selectedPickupPoint = pickupPoints?.find(p => p.id === selectedPickupPointId);
-            
-            if (!selectedPickupPoint) {
+
+            if (selectedPickupPoint) {
+                await createOrder({
+                    pickupPoint: {
+                        id: selectedPickupPoint.id,
+                        title: selectedPickupPoint.title
+                    },
+                    date,
+                    packageNumber,
+                    recipientName
+                });
+                setIsSuccess(true);
+            } else {
                 throw new Error("Pickup point not found");
             }
-
-            await createOrder({
-                pickupPoint: {
-                    id: selectedPickupPoint.id,
-                    title: selectedPickupPoint.title
-                },
-                date,
-                packageNumber,
-                recipientName
-            });
-            setIsSuccess(true);
         } catch (error) {
             console.error("Failed to create order:", error);
             alert("Ошибка при создании заказа");
