@@ -1,5 +1,5 @@
-import { PackageCreatePage } from "@/views/package-create"; // Импортируем страницу из src/views
+import { PackageCreatePage } from "@/views/package-create";
 
 export default function Page() {
-    return <PackageCreatePage />; // Рендерим её
+    return <PackageCreatePage />;
 }
