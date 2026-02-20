@@ -1,1 +1,1 @@
-// Package Create Form Widget
+export { default as PackageCreateForm } from "./ui/PackageCreateForm";

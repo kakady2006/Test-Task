@@ -1,4 +1,4 @@
-import PackageCreateForm from "@/widgets/package-create-form/ui/PackageCreateForm";
+import { PackageCreateForm } from "@/widgets/package-create-form";
 
 export const PackageCreatePage = () => {
   return (

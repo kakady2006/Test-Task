@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { usePickupPoints } from "@/entities/pickup-point/api/usePickupPoints";
 import { useDeliveryDates } from "@/entities/date/api/useDeliveryDates";
 import { createOrder } from "@/features/create-package/api/createOrder";
 
 const PackageCreateForm = () => {
+    const router = useRouter();
     const { pickupPoints } = usePickupPoints();
     const { deliveryDates } = useDeliveryDates();
     const [selectedPickupPointId, setSelectedPickupPointId] = useState("");
@@ -16,7 +18,6 @@ const PackageCreateForm = () => {
     const [date, setDate] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
 
     const currentPickupPointDates = useMemo(() => 
         deliveryDates?.find((d) => d.id === selectedPickupPointId),
@@ -66,21 +67,25 @@ const PackageCreateForm = () => {
         setIsSubmitting(true);
         try {
             const selectedPickupPoint = pickupPoints?.find(p => p.id === selectedPickupPointId);
-
-            if (selectedPickupPoint) {
-                await createOrder({
-                    pickupPoint: {
-                        id: selectedPickupPoint.id,
-                        title: selectedPickupPoint.title
-                    },
-                    date,
-                    packageNumber,
-                    recipientName
-                });
-                setIsSuccess(true);
-            } else {
-                throw new Error("Pickup point not found");
+            
+            if (!selectedPickupPoint) {
+                console.error("Pickup point not found");
+                alert("Пункт выдачи не найден");
+                return;
             }
+
+            await createOrder({
+                pickupPoint: {
+                    id: selectedPickupPoint.id,
+                    title: selectedPickupPoint.title
+                },
+                date,
+                packageNumber,
+                recipientName
+            });
+
+            router.push('/package-list');
+
         } catch (error) {
             console.error("Failed to create order:", error);
             alert("Ошибка при создании заказа");
@@ -89,7 +94,7 @@ const PackageCreateForm = () => {
         }
     };
 
-    const isDisabled = isSubmitting || isSuccess;
+    const isDisabled = isSubmitting;
 
     const arrowSvg = "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M16 10l-4 4-4-4' /%3e%3c/svg%3e\")";
 
@@ -199,7 +204,7 @@ const PackageCreateForm = () => {
                         : "bg-[#F3F4F6] text-gray-400 cursor-not-allowed"
                     }`}
                 >
-                    {isSubmitting ? "Отправка..." : isSuccess ? "Добавлено" : "Добавить"}
+                    {isSubmitting ? "Отправка..." : "Добавить"}
                 </button>
             </div>
         </div>
