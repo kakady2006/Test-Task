@@ -17,6 +17,7 @@ export const createOrder = async (data: CreateOrderData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      id: crypto.randomUUID(),
       date: data.date,
       pickupPoint: {
         id: data.pickupPoint.id,
