@@ -83,8 +83,9 @@ const PackageCreateForm = () => {
                 packageNumber,
                 recipientName
             });
-
-            router.push('/package-list');
+            
+            // Редирект на страницу списка
+            router.push('/orders');
 
         } catch (error) {
             console.error("Failed to create order:", error);
